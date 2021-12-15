@@ -1,57 +1,76 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { BaseComponent } from '../base/base.component';
+import { UserService } from '../services/user.service';
+import { User } from '../models/user'
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent extends BaseComponent implements OnInit {
   public users: User[] = [];
   public userForm: FormGroup;
-  private baseUrl: string;
-  private http: HttpClient;
-  public formError: string;
 
-    constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-      this.baseUrl = baseUrl;
-      this.http = http;
-      this.formError = '';
+  constructor(
+    private userService: UserService
+  ) {
+    super();
+  }
 
-      this.LoadUsers();
-    }
+  ngOnInit(): void {
+    this.loadUsers();
 
-      ngOnInit() {
-        this.userForm = new FormGroup({
-          name: new FormControl('', [Validators.required, Validators.maxLength(60)]),
-          email: new FormControl('', [Validators.required, Validators.maxLength(100)])
-        });
-      }
-
-        get getName(){
-      	return this.userForm.get('name')
+    this.userForm = new FormGroup({
+      name: new FormControl(
+        '',
+        {
+          validators: [
+            Validators.required,
+            Validators.minLength(3),
+            Validators.maxLength(50)
+          ]
         }
+      ),
+      email: new FormControl(
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(50)
+        ]
+      )
+    });
+  }
 
-          get getEmail(){
-        	return this.userForm.get('email')
-          }
+  loadUsers() {
+    this.userService
+      .getUsers()
+      .pipe(this.untilThis)
+      .subscribe(users => {
+        this.users = users;
+      }, error => {
+        console.log(error);
+      });
+  }
 
-    LoadUsers(){
-          this.http.get<User[]>(this.baseUrl + 'user').subscribe(result => {
-            this.users = result;
-          }, error => console.error(error));
-    }
+  SaveUser(user: User) {
+    this.userService.createUser(user)
+      .subscribe(
+        () => {
+          this.loadUsers();
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
 
-    SaveUser(user: User) {
-      this.http.post<any>(this.baseUrl + 'user', user).subscribe(result => {
-        this.LoadUsers();
-      }, error => console.log(error.error))
-    }
-}
+  get name() {
+    return this.userForm.controls.name;
+  }
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  registrationDate: string;
+  get email() {
+    return this.userForm.controls.email;
+  }
 }
