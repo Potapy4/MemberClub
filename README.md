@@ -1,4 +1,4 @@
-MemberClub
+MemberClub build with .NET 6 & Angular
 
 ## How to run?
 1. Clone this repo and build the app: `docker build -t memberapp:latest .`
