@@ -11,7 +11,7 @@
           <label for="name">Name</label>
           <input id="name" formControlName="name" type="text" class="form-control" required />
         </div>
-        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="input-validation-error" id="projectName">
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="input-validation-error" id="userName">
           <small *ngIf="name?.errors?.required" class="text-danger">
             Сan not be empty
           </small>
@@ -28,7 +28,7 @@
           <small *ngIf="email.errors?.pattern" class="text-danger">Please provide a valid email address</small>
         </div>
       </div>
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="input-validation-error" id="projectName">
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="input-validation-error" id="userEmail">
         <small *ngIf="email?.errors?.required" class="text-danger">
           Сan not be empty
         </small>
@@ -44,6 +44,9 @@
       </div>
     </div>
   </form>
+  <div *ngIf="requestError !== ''" class="text-danger" id="requestError">
+    <h6>{{ requestError }}</h6>
+  </div>
 </div>
 
 <p *ngIf="!users"><em>Loading...</em></p>
