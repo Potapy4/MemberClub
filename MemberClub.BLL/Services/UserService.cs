@@ -24,6 +24,11 @@ public class UserService : IUserService
             throw new ValidationException(validationResult.ToString());
         }
 
+        if (_context.Users.Any(x => x.Email == user.Email))
+        {
+            throw new Exception("User with the same email address already exists");
+        }
+
         var userEntity = new User
         {
             Email = user.Email,
@@ -35,7 +40,7 @@ public class UserService : IUserService
         _context.Users.Add(userEntity);
         _context.SaveChanges();
     }
-
+    
     public IEnumerable<UserDto> GetUsers()
     {
         return _context.Users.Select(u => new UserDto
