@@ -1,7 +1,7 @@
 <h1 id="tableLabel" class="text-center">Welcome to the club!</h1>
 
 <div class="col-4">
-  <form [formGroup]="userForm" (ngSubmit)="SaveUser(userForm.value)">
+  <form [formGroup]="userForm" (ngSubmit)="saveUser(userForm.value)">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">Add User</h3>
@@ -41,6 +41,7 @@
       </div>
       <div class="panel-footer">
         <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="offset-8 btn btn-info" (click)="clearForm()">Clear</button>
       </div>
     </div>
   </form>
