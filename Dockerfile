@@ -12,16 +12,16 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
-COPY ["MemberClub/MemberClub.csproj", "MemberClub/"]
-RUN dotnet restore "MemberClub/MemberClub.csproj"
+COPY ["MemberClub.WEB/MemberClub.WEB.csproj", "MemberClub/"]
+RUN dotnet restore "MemberClub/MemberClub.WEB.csproj"
 COPY . .
-WORKDIR "/src/MemberClub"
-RUN dotnet build "MemberClub.csproj" -c Release -o /app/build
+WORKDIR "/src/MemberClub.WEB"
+RUN dotnet build "MemberClub.WEB.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MemberClub.csproj" -c Release -o /app/publish
+RUN dotnet publish "MemberClub.WEB.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MemberClub.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet MemberClub.WEB.dll
