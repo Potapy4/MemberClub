@@ -74,7 +74,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
     this.userForm.reset();
     this.requestError = '';
     Object.keys(this.userForm.controls).forEach(key => {
-          this.userForm.get(key).setErrors(null) ;
+          this.userForm?.get(key)?.setErrors(null) ;
         });
   }
 
