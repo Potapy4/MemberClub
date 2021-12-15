@@ -7,6 +7,7 @@ import { User } from '../models/user'
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent extends BaseComponent implements OnInit {
   public users: User[] = [];
@@ -55,7 +56,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
       });
   }
 
-  SaveUser(user: User) {
+  saveUser(user: User) {
     this.requestError = '';
     this.userService.createUser(user)
       .subscribe(
@@ -67,6 +68,10 @@ export class HomeComponent extends BaseComponent implements OnInit {
           console.log(error);
         }
       );
+  }
+
+  clearForm(){
+    this.userForm.reset();
   }
 
   get name() {
