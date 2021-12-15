@@ -11,6 +11,7 @@ import { User } from '../models/user'
 export class HomeComponent extends BaseComponent implements OnInit {
   public users: User[] = [];
   public userForm: FormGroup;
+  public requestError: string;
 
   constructor(
     private userService: UserService
@@ -55,12 +56,14 @@ export class HomeComponent extends BaseComponent implements OnInit {
   }
 
   SaveUser(user: User) {
+    this.requestError = '';
     this.userService.createUser(user)
       .subscribe(
         () => {
           this.loadUsers();
         },
         error => {
+          this.requestError = error.error;
           console.log(error);
         }
       );

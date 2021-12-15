@@ -1,6 +1,7 @@
 using MemberClub.BLL.Interfaces;
 using MemberClub.BLL.Services;
 using MemberClub.DAL;
+using MemberClub.WEB.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +31,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllerRoute(
     name: "default",
